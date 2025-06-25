@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import { products } from "../assets/assets";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const ShopContext = createContext()
@@ -11,6 +12,7 @@ const ShopeContextProvider = (props) => {
     const [search, setSearch] = useState('')
     const [showSearch, setShowSearch] = useState(false)
     const [cartItems, setCartItems] = useState({})
+    const navigate = useNavigate()
 
     const addCart = async (itemId, size) => {
         let cartData = structuredClone(cartItems);
@@ -56,12 +58,27 @@ const ShopeContextProvider = (props) => {
         cartData[itemId][size] = quantity;
         setCartItems(cartData);
     };
-
+    const getCartAmount = () => {
+        let amount = 0
+        for(const ids in cartItems){
+            let itemInfor = products.find((product) => product._id === ids)
+            for(const size in cartItems[ids]){
+                try{
+                    if(cartItems[ids][size] > 0){
+                        amount += itemInfor.price * cartItems[ids][size]
+                    }
+                // eslint-disable-next-line no-unused-vars
+                }catch (error){ /* empty */ }
+            }
+        }
+        return amount
+    }
 
     const value = {
         products, currency, delivery_fee,
         search, showSearch, setSearch, setShowSearch,
-        cartItems, addCart, getCartCount, updateQuantity
+        cartItems, addCart, getCartCount, updateQuantity,
+        getCartAmount, navigate
     }
 
     return (
