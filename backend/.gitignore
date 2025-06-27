@@ -1,0 +1,13 @@
+# ⛔ Thư mục node_modules (cực nặng, không cần push)
+node_modules/
+
+# ⛔ File môi trường chứa thông tin nhạy cảm
+.env
+
+# 🛠 Log files
+npm-debug.log*
+yarn-debug.log*
+
+# ⛔ Hệ thống editor / OS
+.DS_Store
+.vscode/
