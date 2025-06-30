@@ -5,8 +5,8 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
-    cartData:{ type: Oject, default: {} }, // Changed to Object to store cart data
-    }, { timestamps: true, minimize: false });
+    cartData: { type: Object, default: {} }, // Changed to Object to store cart data
+}, { timestamps: true, minimize: false });
 
 const userModel = mongoose.models.user || mongoose.model("user", userSchema);
 export default userModel;
