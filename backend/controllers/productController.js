@@ -2,7 +2,15 @@ import { v2 as cloudinary } from 'cloudinary';
 import productModel from '../models/productModel.js';
 // list products
 
-const listProducts = (req, res) => {
+const listProducts = async (req, res) => {
+    try {
+        const products = await productModel.find({});
+        res.json({ success: true, products });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+        
+    }
 
 }
 
@@ -29,10 +37,10 @@ const addProduct = async (req, res) => {
         const { name, price, description, category,
             subCategory, sizes, bestseller
         } = req.body;
-        const image1 = req.files.images1 && req.files.images1[0]
-        const image2 = req.files.images2 && req.files.images2[0]
-        const image3 = req.files.images3 && req.files.images3[0]
-        const image4 = req.files.images4 && req.files.images4[0]
+        const image1 = req.files.image1 && req.files.image1[0]
+        const image2 = req.files.image2 && req.files.image2[0]
+        const image3 = req.files.image3 && req.files.image3[0]
+        const image4 = req.files.image4 && req.files.image4[0]
 
         const images = [image1, image2, image3, image4].filter(image => image !== undefined)
 
