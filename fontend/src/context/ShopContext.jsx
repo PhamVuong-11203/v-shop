@@ -16,6 +16,7 @@ const ShopeContextProvider = (props) => {
     const [showSearch, setShowSearch] = useState(false)
     const [cartItems, setCartItems] = useState({})
     const [products, setProducts] = useState([])
+    const [token,setToken] = useState('')
     const navigate = useNavigate()
 
     const addCart = async (itemId, size) => {
@@ -93,13 +94,22 @@ const ShopeContextProvider = (props) => {
     
    useEffect(() => {
     getProductData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (!token && storedToken) {
+            setToken(storedToken);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const value = {
         products, currency, delivery_fee,
         search, showSearch, setSearch, setShowSearch,
-        cartItems, addCart, getCartCount, updateQuantity,
-        getCartAmount, navigate, backendUrl
+        cartItems,setCartItems, addCart, getCartCount, updateQuantity,
+        getCartAmount, navigate, backendUrl, token, setToken
     }
 
     return (

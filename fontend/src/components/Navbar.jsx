@@ -4,7 +4,15 @@ import { NavLink, Link } from "react-router";
 import { ShopContext } from '../context/ShopContext';
 const Navbar = () => {
   const [visible, setVisible] = useState(false)
-  const { setShowSearch, getCartCount } = useContext(ShopContext)
+  const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = useContext(ShopContext)
+
+  const logout = () => {
+    navigate('/login')
+    localStorage.removeItem('token')
+    setToken('')
+    setCartItems({})
+  }
+
   return (
     <div className='flex items-center justify-between py-5 font-medium '>
       <Link to='/'><img src={assets.logo} alt="" className='w-36' /></Link>
@@ -56,16 +64,19 @@ const Navbar = () => {
 
 
         <div className='group relative'>
-          <Link to={'/login'}><img src={assets.profile_icon} alt=""
+          <img onClick={() => token ? null : navigate('/login')} src={assets.profile_icon} alt=""
             className='w-5 cursor-pointer hover:-translate-y-1 hover:scale-110' />
-          </Link>
-          <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-            <div className="flex flex-col gap-2 w-36 px-5 py-3 bg-slate-100 text-gray-500 rounded">
-              <div className="cursor-pointer hover:text-black">My Profile</div>
-              <div className="cursor-pointer hover:text-black">Orders</div>
-              <div className="cursor-pointer hover:text-black">Logout</div>
-            </div>
-          </div>
+            {/* Dropdown menu  */}
+          {token &&
+            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
+              <div className="flex flex-col gap-2 w-36 px-5 py-3 bg-slate-100 text-gray-500 rounded">
+                <div className="cursor-pointer hover:text-black">My Profile</div>
+                <div onClickCapture={() => navigate('/orders')} className="cursor-pointer hover:text-black">Orders</div>
+                <div onClick={logout} className="cursor-pointer hover:text-black">Logout</div>
+              </div>
+            </div>}
+
+
         </div>
         <Link to='/cart' className='relative'>
           <img src={assets.cart_icon} alt="" className="w-5 min-w-5 hover:-translate-y-1 hover:scale-110 " />

@@ -1,12 +1,62 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import { ShopContext } from '../context/ShopContext'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const Login = () => {
 
-  const [currenState, setCurrentState] = useState('Sign Up')
+  const [currenState, setCurrentState] = useState('Login')
+  const { token, setToken, navigate, backendUrl } = useContext(ShopContext)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+
 
   const SubmitHandle = async (e) => {
     e.preventDefault()
+    try {
+      if (currenState === 'Sign Up') {
+        const response = await axios.post(`${backendUrl}/api/users/register`, {
+          name,
+          email,
+          password
+        })
+        if (response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem('token', response.data.token)
+          toast.success('Account created successfully, please login.')
+          setCurrentState('Login')
+        } else {
+          toast.error(response.data.message || 'Something went wrong, please try again.')
+        }
+
+      } else if (currenState === 'Login') {
+        const response = await axios.post(`${backendUrl}/api/users/login`, {
+          email,
+          password
+        })
+        if (response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem('token', response.data.token)
+          toast.success('Login successful!')
+        } else {
+          toast.error(response.data.message || 'Invalid credentials, please try again.')
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Something went wrong, please try again later.')
+
+    }
   }
+
+  useEffect(() => {
+    if (token) {
+      navigate('/')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
   return (
     <div>
@@ -17,11 +67,11 @@ const Login = () => {
           <hr className="border-none h-[1.5px] w-8 bg-gray-800" />
         </div>
         {currenState === 'Login' ? '' :
-          <input type="text" className="w-full px-3 py-2 border border-gray-800"
+          <input onChange={(e) => setName(e.target.value)} value={name} type="text" className="w-full px-3 py-2 border border-gray-800"
             placeholder="Name" required />}
-        <input type="email" className="w-full px-3 py-2 border border-gray-800"
+        <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" className="w-full px-3 py-2 border border-gray-800"
           placeholder="Email" required />
-        <input type="password" className="w-full px-3 py-2 border border-gray-800"
+        <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" className="w-full px-3 py-2 border border-gray-800"
           placeholder="Password" required />
         <div className="w-full flex justify-between text-sm mt-[-8px]">
           <p className=" cursor-pointer">Forgot your password?</p>
