@@ -2,6 +2,7 @@ import express from 'express';
 import adminAuth from '../middlewares/adminAuth.js';
 import authUser from '../middlewares/auth.js';
 import { placeOderCOD, placeOderStripe, placeOderRazorpay, getAllOrders, getUserOrders, updateOrderStatus } from '../controllers/orderController.js';
+import e from 'express';
 const orderRouter = express.Router();
 
 // Order using COD
@@ -19,3 +20,6 @@ orderRouter.get('/user-orders', authUser, getUserOrders);
 orderRouter.get('/list-orders', adminAuth, getAllOrders);
 // Update order status for admin panel
 orderRouter.post('/oder-status', updateOrderStatus);
+
+
+export default orderRouter;
