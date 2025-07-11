@@ -5,11 +5,9 @@ import './index.css'
 import App from './App.jsx'
 import ShopeContextProvider from './context/ShopContext'
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <BrowserRouter>
       <ShopeContextProvider>
         <App />
       </ShopeContextProvider>
     </BrowserRouter>
-  </StrictMode>,
 )
